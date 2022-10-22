@@ -1,13 +1,11 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DistanceAuto;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TimedAuto;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,13 +22,23 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final static DriveTrain drive = new DriveTrain();
+  private final static TimedAuto timedAuto = new TimedAuto();
   private static Joystick joy1;
   private static Joystick joy2;
+  private final DriveTrain _driveTrain;
+  private final Joystick _leftJoystick;
+  private final Joystick _rightJoystick;
+  //private final TankDrive _tankDrive;
+  private final Command _distanceAuto;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
-    joy1 = new Joystick(Constants.joy1);
-    joy2 = new Joystick(Constants.joy2);
+    _driveTrain = new DriveTrain();
+    _leftJoystick = new Joystick(Constants.joy1);
+    _rightJoystick = new Joystick(Constants.joy2);
+    //_tankDrive = new TankDrive(_driveTrain,_leftJoystick,_rightJoystick);
+    _distanceAuto = new DistanceAuto(_driveTrain,1);
+    //_driveTrain.setDefaultCommand(_distanceAuto);
     configureButtonBindings();
   }
 
@@ -49,7 +57,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return _distanceAuto;
   }
   public static Joystick getJoy1(){
     return joy1;
